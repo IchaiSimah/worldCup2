@@ -1,8 +1,7 @@
 #ifndef UP_TREE_H_
 #define UP_TREE_H_
 
-#include "Player.h"
-#include "Team.h"
+
 struct NodeInUT
 {
     int id;
