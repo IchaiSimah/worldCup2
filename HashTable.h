@@ -12,6 +12,7 @@ private:
     int m_currentPower = 1;
     int m_numOfElements = 0;
     int m_numOfTomb = 0;
+    int m_removeCounter =0;
     T* m_table;
     T m_tomb;
 
@@ -46,7 +47,9 @@ public:
         m_table [find(key)] = m_tomb;
         m_numOfElements--;
         m_numOfTomb++;
+        m_removeCounter++;
         updateSize();
+        if (m_removeCounter>=m_size/3) rehash(0);
     }
 
     int find (int key){
@@ -66,7 +69,7 @@ public:
 //--------------------------------------- Structure management -------------------------------------------------//
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    int doubleHashing(int id, int k){
+int doubleHashing(int id, int k){                                   // Hash Function for k=0
         return (id % m_size + k * (1 + id % (m_size - 2))) % m_size;
     }
 
@@ -93,7 +96,7 @@ public:
     }
 
 
-    void rehash(int num){                                              // if num == 1 sizeUp, if num==-1 sizeDown
+    void rehash(int num){                                          // if num == 1 sizeUp, if num==-1 sizeDown
         if ((num!=1) && (num!=-1) && (num!=0)) return;
         int current_size= m_size;
         int counter = 0;
