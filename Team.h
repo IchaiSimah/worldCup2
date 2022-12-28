@@ -9,11 +9,13 @@ private:
     Player* leader;
     int numOfGoalKeepers;
     int totalAbility;
+    bool inGame = true;
 
 public:
     Team(int teamId): id(teamId){}
     void addCards();
     int getGamePlayed();
+    bool isInGame();
 };
 
 

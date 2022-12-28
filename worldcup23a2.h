@@ -24,7 +24,6 @@ class world_cup_t {
 private:
 	AVL<int , Team*> AVL_team_by_id = AVL<int, Team *>();
 	HashTable<Player*> playersTable = HashTable<Player*>(new Player(-1));
-    HashTable<Player*> eliminatedPlayerTable = HashTable<Player*>(new Player(-1));
 public:
 	// <DO-NOT-MODIFY> {
 	

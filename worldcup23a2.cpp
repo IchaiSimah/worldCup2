@@ -41,10 +41,14 @@ StatusType world_cup_t::remove_team(int teamId){
 
 StatusType world_cup_t::add_player(int playerId, int teamId,
                                    const permutation_t &spirit, int gamesPlayed,
-                                   int ability, int cards, bool goalKeeper)
-{
-	// TODO: Your code goes here
-	return StatusType::SUCCESS;
+                                   int ability, int cards, bool goalKeeper){
+    if (playerId <= 0 || teamId <= 0 /*|| if spirit not good */ ||gamesPlayed < 0|| cards < 0 ){
+        return StatusType::INVALID_INPUT;
+        if (playersTable.find(playerId)!=-1|| AVL_team_by_id.find(teamId)== nullptr) return  StatusType::FAILURE;
+
+        //continuer ici
+
+        return StatusType::SUCCESS;
 }
 
 output_t<int> world_cup_t::play_match(int teamId1, int teamId2)
@@ -53,8 +57,7 @@ output_t<int> world_cup_t::play_match(int teamId1, int teamId2)
 	return StatusType::SUCCESS;
 }
 
-output_t<int> world_cup_t::num_played_games_for_player(int playerId)
-{
+output_t<int> world_cup_t::num_played_games_for_player(int playerId){
     if (playerId <= 0){
         return StatusType::INVALID_INPUT;
     }
@@ -69,25 +72,18 @@ StatusType world_cup_t::add_player_cards(int playerId, int cards){
 
     if (playerId <= 0)return StatusType::INVALID_INPUT;
     int indexOfPlayer = playersTable.find(playerId);
-    int indexOfEliminatedPlayer = eliminatedPlayerTable.find(playerId);
-    if ((indexOfPlayer == -1) || (indexOfEliminatedPlayer==-1)) return StatusType::FAILURE;
+    if ((indexOfPlayer == -1) || !(playersTable.getT(indexOfPlayer)->getTeam()->isInGame())) return StatusType::FAILURE;
     if (indexOfPlayer != -1){
         playersTable.getT(indexOfPlayer)->addCards(cards);
-        playersTable.getT(indexOfPlayer)->getTeam()->addCards;
-    }
-    else if (indexOfEliminatedPlayer != -1){
-        eliminatedPlayerTable.getT(indexOfPlayer)->addCards(cards);
-        eliminatedPlayerTable.getT(indexOfPlayer)->getTeam()->addCards;
+        playersTable.getT(indexOfPlayer)->getTeam()->addCards(cards);
     }
 
-output_t<int> world_cup_t::get_player_cards(int playerId) {
+output_t<int> world_cup_t::get_player_cards(int playerId){
 
-    if (playerId <= 0)return StatusType::INVALID_INPUT;
+    if (playerId <= 0) return StatusType::INVALID_INPUT;
     int indexOfPlayer = playersTable.find(playerId);
-    int indexOfEliminatedPlayer = eliminatedPlayerTable.find(playerId);
-    if (indexOfPlayer == -1) && (indexOfEliminatedPlayer==-1) return StatusType::FAILURE;
-    return (indexOfPlayer != -1 ? playersTable.getT(indexOfPlayer)->getCards()
-                                : eliminatedPlayerTable.getT(indexOfEliminatedPlayer)->getCards());
+    if ((indexOfPlayer == -1) && !(playersTable.getT(indexOfPlayer)->getTeam()->isInGame())) return StatusType::FAILURE;
+    return playersTable.getT(indexOfPlayer)->getCards();
 }
 
 return StatusType::SUCCESS;
