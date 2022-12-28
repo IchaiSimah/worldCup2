@@ -13,7 +13,7 @@ private:
 
 public:
     Team(int teamId): id(teamId){}
-    void addCards();
+    void addCards(int i);
     int getGamePlayed();
     bool isInGame();
 };

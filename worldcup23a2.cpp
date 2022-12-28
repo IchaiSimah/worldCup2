@@ -6,8 +6,7 @@ world_cup_t::world_cup_t(){
 world_cup_t::~world_cup_t(){
 }
 
-StatusType world_cup_t::add_team(int teamId)
-{
+StatusType world_cup_t::add_team(int teamId){
     if (teamId <= 0){
         return StatusType::INVALID_INPUT;
     }

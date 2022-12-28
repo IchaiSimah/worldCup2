@@ -16,7 +16,7 @@ private:
 public:
     Player(int id, permutation_t spirit=permutation_t(0), int gamesplayed=0, int ability=0, int cards=0, bool goalKeeper=false);
     void addCards(int cards);
-    void getTeam();
+    Team* getTeam();
     int getNumGames();
 };
 
