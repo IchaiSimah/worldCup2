@@ -2,8 +2,11 @@
 #define UP_TREE_H_
 
 
-struct NodeInUT
-{
+class Player;
+class Team;
+
+class NodeInUT{
+private:
     int id;
     Player* player;
     NodeInUT* leader;

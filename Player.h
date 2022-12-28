@@ -12,9 +12,12 @@ private:
     int ability;
     int cards;
     bool goalKeeper;
-    NodeInUT nodeInUT;
+    NodeInUT* nodeInUT;
 public:
-    Player(int id, permutation_t spirit, int gamesplayed, int ability, int cards, bool goalKeeper);
+    Player(int id, permutation_t spirit=permutation_t(0), int gamesplayed=0, int ability=0, int cards=0, bool goalKeeper=false);
+    void addCards(int cards);
+    void getTeam();
+    int getNumGames();
 };
 
 

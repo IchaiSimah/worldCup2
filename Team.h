@@ -2,6 +2,7 @@
 #define TEAM_H_
 
 #include"Player.h"
+
 class Team{
 private:
     int id;
@@ -10,7 +11,9 @@ private:
     int totalAbility;
 
 public:
-
+    Team(int teamId): id(teamId){}
+    void addCards();
+    int getGamePlayed();
 };
 
 

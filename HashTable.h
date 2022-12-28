@@ -28,6 +28,9 @@ public:
         delete []m_table;
     }
 
+    T getT(int index){
+        return m_table[index];
+    }
 
     void insert (int key,T data){
         if (find(key) != -1) return;                                    // if the element is already in the table return
@@ -46,7 +49,7 @@ public:
         updateSize();
     }
 
-    T find (int key){
+    int find (int key){
         int k = 0, i =0;
         while (m_table[i] != nullptr && m_table[i]->getPlayerId() != key){
             i= doubleHashing(key, k);
