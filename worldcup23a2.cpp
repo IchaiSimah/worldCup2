@@ -67,15 +67,16 @@ output_t<int> world_cup_t::num_played_games_for_player(int playerId){
     return player->getNumGames() + player->getTeam()->getGamePlayed();
 }
 
-StatusType world_cup_t::add_player_cards(int playerId, int cards){
+StatusType world_cup_t::add_player_cards(int playerId, int cards) {
 
     if (playerId <= 0)return StatusType::INVALID_INPUT;
     int indexOfPlayer = playersTable.find(playerId);
     if ((indexOfPlayer == -1) || !(playersTable.getT(indexOfPlayer)->getTeam()->isInGame())) return StatusType::FAILURE;
-    if (indexOfPlayer != -1){
+    if (indexOfPlayer != -1) {
         playersTable.getT(indexOfPlayer)->addCards(cards);
         playersTable.getT(indexOfPlayer)->getTeam()->addCards(cards);
     }
+}
 
 output_t<int> world_cup_t::get_player_cards(int playerId){
 
@@ -83,9 +84,7 @@ output_t<int> world_cup_t::get_player_cards(int playerId){
     int indexOfPlayer = playersTable.find(playerId);
     if ((indexOfPlayer == -1) && !(playersTable.getT(indexOfPlayer)->getTeam()->isInGame())) return StatusType::FAILURE;
     return playersTable.getT(indexOfPlayer)->getCards();
-}
 
-return StatusType::SUCCESS;
 }
 
 output_t<int> world_cup_t::get_team_points(int teamId)

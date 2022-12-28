@@ -114,6 +114,7 @@ int doubleHashing(int id, int k){                                   // Hash Func
             m_table[findIndexToInsert(tempArray[i]->getPlayerId())] = tempArray[i];
         }
         m_numOfTomb = 0;
+        m_removeCounter=0;
     }
 
 };

@@ -18,6 +18,7 @@ public:
     void addCards(int cards);
     Team* getTeam();
     int getNumGames();
+    int getCards();
 };
 
 
