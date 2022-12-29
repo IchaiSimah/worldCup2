@@ -74,3 +74,7 @@ Team* NodeInUT::getTeam(){
 Player *NodeInUT::getPlayer() const {
     return player;
 }
+
+int NodeInUT::getId() {
+    return id;
+}

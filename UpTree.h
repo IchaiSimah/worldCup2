@@ -29,6 +29,7 @@ public:
     NodeInUT* getFather()const;
     Player* getPlayer()const;
     Team* getTeam();
+    int getId();
 
     void treeContraction();
 };

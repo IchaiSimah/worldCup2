@@ -35,3 +35,7 @@ int Player::getTotalPlayedGames(){
 void Player::setNode(NodeInUT *node) {
     nodeInUT=node;
 }
+
+int Player::getPlayerId() {
+    return getNode()->getId();
+}

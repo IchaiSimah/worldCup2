@@ -19,6 +19,7 @@ public:
     void setNode(NodeInUT* node);
 
     int getCards();
+    int getPlayerId();
     NodeInUT* getNode();
     int getAbility()const;
     bool isGoalKeeper()const;
