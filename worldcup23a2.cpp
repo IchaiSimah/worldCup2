@@ -51,7 +51,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId,
 	team->addSpirit(spirit);
 	permutation_t internSpirit =team->getLeader()->getNode()->getInternSpirit().inv()*team->getTotalSpirit();
 	int tmpGamesPlayed = gamesPlayed - team->getLeader()->getNode()->getGamesPlayed();
-	NodeInUT node(playerId, &newPlayer, team->getLeader()->getNode(), team, tmpGamesPlayed, internSpirit, 0);
+	NodeInUT node(playerId, &newPlayer, team->getLeader()->getNode(), team, tmpGamesPlayed, internSpirit);
 	team->addPlayer(newPlayer);
 	
 	
@@ -73,7 +73,7 @@ output_t<int> world_cup_t::play_match(int teamId1, int teamId2)
 	}
 	team1->getLeader()->getNode()->addMatch();
 	team2->getLeader()->getNode()->addMatch();
-	Team* winner = nullptr; 
+	Team* winner = nullptr;
 	if(team1->getTotalAbility() + team1->getPoints() > team2->getTotalAbility() + team2->getPoints()){
 		winner = team1;
 	}
@@ -112,23 +112,36 @@ output_t<int> world_cup_t::num_played_games_for_player(int playerId){
     if (playersTable.find(playerId) == -1){
         return StatusType::FAILURE;
     }
+
     NodeInUT* playerNode = playersTable.getT(playersTable.find(playerId))->getNode();
+	if(playerNode->getLeader()->getLeader()){
+	playerNode->treeContraction();}
 	int playedGames=0;
 	while (playerNode){
 		playedGames+=playerNode->getGamesPlayed();
 		playerNode = playerNode->getLeader();
 	}
-    return playedGames;
+    return playerNode->getGamesPlayed() + playerNode->getLeader()->getGamesPlayed();
+}
+
+
+
+Team* getTeam(Player* player){	
+	NodeInUT* playerNode = player->getNode();
+	if(playerNode->getLeader()->getLeader()){
+	playerNode->treeContraction();}
+    return playerNode->getLeader()->getTeam();
 }
 
 StatusType world_cup_t::add_player_cards(int playerId, int cards){
 
     if (playerId <= 0)return StatusType::INVALID_INPUT;
     int indexOfPlayer = playersTable.find(playerId);
-    if ((indexOfPlayer == -1) || !(playersTable.getT(indexOfPlayer)->getTeam()->isInGame())) return StatusType::FAILURE;
+    if ((indexOfPlayer == -1) || !(playersTable.getT(indexOfPlayer)->getNode()->getTeam()->isInGame())) return StatusType::FAILURE;
     if (indexOfPlayer != -1){
-        playersTable.getT(indexOfPlayer)->addCards(cards);
-        playersTable.getT(indexOfPlayer)->getTeam()->addCards(cards);
+		Player* player = playersTable.getT(indexOfPlayer);
+        player->addCards(cards);
+        getTeam(player)->addCards(cards);
     }
 }
 
@@ -161,11 +174,9 @@ output_t<permutation_t> world_cup_t::get_partial_spirit(int playerId)
 
 	permutation_t partialSpirit;
 	NodeInUT* playerNode = playersTable.getT(indexOfPlayer)->getNode();
-	while (playerNode){
-		partialSpirit = playerNode->getInternSpirit() * partialSpirit;
-		playerNode = playerNode->getLeader();
-	}
-	return permutation_t();
+	if(playerNode->getLeader()->getLeader()){
+	playerNode->treeContraction();}
+	return playerNode->getLeader()->getInternSpirit() * playerNode->getInternSpirit();
 }
 
 StatusType world_cup_t::buy_team(int teamId1, int teamId2)
@@ -194,5 +205,7 @@ StatusType world_cup_t::buy_team(int teamId1, int teamId2)
 	team1->addCards(team2->getTotalCards());
 	team1->addGoalKeeper(team2->getNumOfGK());
 	team1->addAbility(team2->getTotalAbility());
+	AVL_team_by_id.remove(teamId2);
+	delete team2;	
 	return StatusType::SUCCESS;
 }

@@ -1,6 +1,6 @@
 #ifndef UP_TREE_H_
 #define UP_TREE_H_
-
+#include "wet2util.h"
 
 class Player;
 class Team;
@@ -15,13 +15,16 @@ private:
     permutation_t internSpirit;
 public: 
     NodeInUT(int id, Player* player, NodeInUT* leader, Team* team, int gamesPlayed, 
-                                const permutation_t internSpirit, int numOfPlayers);
-    permutation_t getInternSpirit();
+                                const permutation_t internSpirit);
+    permutation_t getInternSpirit()const;
     void addMatch(int i = 1);
-    int getGamesPlayed();
+    int getGamesPlayed()const;
     NodeInUT* getLeader()const;
     void setInternSpirit(permutation_t &spirit);
-    void setLeader(const NodeInUT* leader);
+    void setLeader(NodeInUT* newLeader);
+    void setGamePlayed(int num);
+    void treeContraction();
+    Team* getTeam();
 };
 
 // Class UpTree{

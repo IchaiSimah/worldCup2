@@ -15,13 +15,13 @@ private:
     NodeInUT* nodeInUT;
 public:
     Player(int id, permutation_t spirit=permutation_t(0), int gamesplayed=0, int ability=0, int cards=0, bool goalKeeper=false);
-    void addCards(int cards);
-    Team* getTeam();
-    int getNumGames();
+    void addCards(int cardsToAdd);
     int getCards();
     NodeInUT* getNode();
     int getAbility()const;
     bool isGoalKeeper()const;
+    int getTotalPlayedGames();
+    
 };
 
 
