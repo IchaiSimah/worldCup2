@@ -52,7 +52,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t
 	permutation_t internSpirit = team->getLeader()->getNode()->getInternSpirit().inv()*team->getTotalSpirit();
 	int tmpGamesPlayed = gamesPlayed - team->getLeader()->getNode()->getGamesPlayed();
 	NodeInUT node(playerId, newPlayer, team->getLeader()->getNode(), team, tmpGamesPlayed, internSpirit);
-	team->addPlayer(newPlayer);
+	team->updateStats(newPlayer);
     return StatusType::SUCCESS;
 }
 
@@ -107,22 +107,22 @@ output_t<int> world_cup_t::num_played_games_for_player(int playerId){
     }
 
     NodeInUT* playerNode = playersTable.getT(playersTable.find(playerId))->getNode();
-	if(playerNode->getLeader()->getLeader()){
+	if(playerNode->getFather()->getFather()){
 	playerNode->treeContraction();}
 	int playedGames=0;
 	while (playerNode){
 		playedGames+=playerNode->getGamesPlayed();
-		playerNode = playerNode->getLeader();
+		playerNode = playerNode->getFather();
 	}
-    return playerNode->getGamesPlayed() + playerNode->getLeader()->getGamesPlayed();
+    return playerNode->getGamesPlayed() + playerNode->getFather()->getGamesPlayed();
 }
 
 
 
 Team* getTeam(Player* player){	
 	NodeInUT* playerNode = player->getNode();
-	if(playerNode->getLeader() ->getLeader()) playerNode->treeContraction();
-    return playerNode->getLeader()->getTeam();
+	if(playerNode->getFather() ->getFather()) playerNode->treeContraction();
+    return playerNode->getFather()->getTeam();
 }
 
 
@@ -167,9 +167,9 @@ output_t<permutation_t> world_cup_t::get_partial_spirit(int playerId){
 
 	permutation_t partialSpirit;
 	NodeInUT* playerNode = playersTable.getT(indexOfPlayer)->getNode();
-	if(playerNode->getLeader()->getLeader()){
+	if(playerNode->getFather()->getFather()){
 	playerNode->treeContraction();}
-	return playerNode->getLeader()->getInternSpirit() * playerNode->getInternSpirit();
+	return playerNode->getFather()->getInternSpirit() * playerNode->getInternSpirit();
 }
 
 

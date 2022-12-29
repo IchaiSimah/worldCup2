@@ -16,21 +16,24 @@ private:
     int points;
     int numOfPlayers;
 public:
+
     Team(int teamId);
     void addCards(int i);
-    bool isInGame()const;
-    Player* getLeader()const;
-    void addSpirit(const permutation_t& spirit);
-    permutation_t getTotalSpirit()const;
-    void setLeader(Player* player);
     void addGoalKeeper(int num = 1);
     void addAbility(int ability);
-    void addPlayer(Player* player);
+    void updateStats(Player* player);
+    void setLeader(Player* player);
+    void addSpirit(const permutation_t& spirit);
+    void addPoints(int pointsToAdd);
+    void increaseNumOfPlayers(int num);
+
+
+    bool isInGame()const;
+    Player* getLeader()const;
+    permutation_t getTotalSpirit()const;
     bool canPlay()const;
     int getTotalAbility()const;
     int getPoints()const;
-    void addPoints(int pointsToAdd);
-    void increaseNumOfPlayers(int num);
     int getNumOfPlayers()const;
     int getTotalCards()const;
     int getNumOfGK()const;

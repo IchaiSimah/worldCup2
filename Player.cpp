@@ -24,6 +24,6 @@ int Player::getTotalPlayedGames(){
     int playedGames = 0;
     while (tmpNode){
 		playedGames+= tmpNode->getGamesPlayed();
-		tmpNode = tmpNode->getLeader();
+		tmpNode = tmpNode->getFather();
 	}
 }

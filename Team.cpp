@@ -10,7 +10,7 @@ Team::Team(int teamId):id(teamId),
                        numOfPlayers(0)
 {}
 
-void Team::addPlayer(Player* player){
+void Team::updateStats(Player* player){
     if(!leader){
 		leader = player;
 	}

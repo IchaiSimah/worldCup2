@@ -1,10 +1,10 @@
 #include "UpTree.h"
 
 
-NodeInUT::NodeInUT(int id,  int gamesPlayed, const permutation_t internSpirit, Player* player, NodeInUT* leader, Team* team):
+NodeInUT::NodeInUT(int id,  int gamesPlayed, const permutation_t internSpirit, Player* player, NodeInUT* father, Team* team):
                                                                                 id(id),
                                                                                 player(player),
-                                                                                leader(leader),
+                                                                                father(father),
                                                                                 team(team),
                                                                                 gamesPlayed(gamesPlayed),
                                                                                 internSpirit(internSpirit){}
@@ -12,22 +12,22 @@ NodeInUT::NodeInUT(int id,  int gamesPlayed, const permutation_t internSpirit, P
 
 void NodeInUT::treeContraction(){
 	NodeInUT* leaderFinder = this;
-    int newPlayedgames = gamesPlayed;
+    int newPlayedGames = gamesPlayed;
     permutation_t newInternSpirit = internSpirit;
-    while (leaderFinder -> leader){
-        leaderFinder = leaderFinder->leader;
-        newPlayedgames += leaderFinder->gamesPlayed;
+    while (leaderFinder -> father){
+        leaderFinder = leaderFinder->father;
+        newPlayedGames += leaderFinder->gamesPlayed;
         newInternSpirit = leaderFinder->internSpirit * newInternSpirit;
     }
     NodeInUT* tmpNode = this;
-    while (tmpNode->leader != leaderFinder){
+    while (tmpNode->father != leaderFinder){
         int tmpGamesPlayed = tmpNode->gamesPlayed;
         permutation_t tmpInternSpirit = tmpNode ->internSpirit;
-        tmpNode->gamesPlayed = newPlayedgames - leader->gamesPlayed;
-        tmpNode->internSpirit = leader->internSpirit.inv() * newInternSpirit;
-        newPlayedgames-=tmpGamesPlayed;
+        tmpNode->gamesPlayed = newPlayedGames - father->gamesPlayed;
+        tmpNode->internSpirit = father->internSpirit.inv() * newInternSpirit;
+        newPlayedGames-=tmpGamesPlayed;
         newInternSpirit = newInternSpirit * tmpInternSpirit.inv();
-        tmpNode->leader = leaderFinder;
+        tmpNode->father = leaderFinder;
     }
 }
 
@@ -47,8 +47,8 @@ int NodeInUT::getGamesPlayed()const{
     }
 
 
-NodeInUT* NodeInUT::getLeader()const{
-        return leader;
+NodeInUT* NodeInUT::getFather()const{
+        return father;
 }
 
 
@@ -57,8 +57,8 @@ void NodeInUT::setInternSpirit(permutation_t &spirit){
     }
 
 
-void NodeInUT::setLeader(NodeInUT* newLeader){
-        leader = newLeader;
+void NodeInUT::setLeader(NodeInUT* newFather){
+    father = newFather;
     }
 
 
