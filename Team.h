@@ -25,12 +25,12 @@ public:
     void setLeader(Player* player);
     void addGoalKeeper(int num = 1);
     void addAbility(int ability);
-    void addPlayer(Player& player);
+    void addPlayer(Player* player);
     bool canPlay()const;
     int getTotalAbility()const;
     int getPoints()const;
     void addPoints(int pointsToAdd);
-    void addPlayers(int num);
+    void increaseNumOfPlayers(int num);
     int getNumOfPlayers()const;
     int getTotalCards()const;
     int getNumOfGK()const;
