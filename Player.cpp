@@ -1,23 +1,26 @@
 #include "Player.h"
 
-Player::Player(int id, permutation_t spirit, int gamesplayed, int ability, int cards, bool goalKeeper):
-id(id),spirit(spirit), gamesPlayed(gamesplayed), ability(ability),cards(cards), goalKeeper(goalKeeper){}
+Player::Player(int ability, int cards, bool goalKeeper): ability(ability),cards(cards), goalKeeper(goalKeeper){}
 
 void Player::addCards(int cardsToAdd){
-    cards+=cardsToAdd;
-}
+        cards+=cardsToAdd;
+    }
+
 int Player::getCards(){
-    return cards;
-}
+        return cards;
+    }
+
 NodeInUT* Player::getNode(){
-    return nodeInUT;
-}
+     return nodeInUT;
+    }
+
 int Player::getAbility()const{
-    return ability;
-}
+        return ability;
+    }
+
 bool Player::isGoalKeeper()const{
-    return goalKeeper;
-}
+        return goalKeeper;
+    }
 
 int Player::getTotalPlayedGames(){
     NodeInUT* tmpNode = nodeInUT;
@@ -26,4 +29,9 @@ int Player::getTotalPlayedGames(){
 		playedGames+= tmpNode->getGamesPlayed();
 		tmpNode = tmpNode->getFather();
 	}
+}// tu fais pas le contraction
+
+
+void Player::setNode(NodeInUT *node) {
+    nodeInUT=node;
 }

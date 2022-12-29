@@ -11,12 +11,13 @@ private:
     int id;
     int gamesPlayed;
     permutation_t internSpirit;
+
     Player* player;
     NodeInUT* father;
     Team* team;
 
 public: 
-    NodeInUT(int id,  int gamesPlayed, const permutation_t internSpirit, Player* player, NodeInUT* father, Team* team);
+    NodeInUT(int id,  int gamesPlayed, const permutation_t& internSpirit, Player* player, NodeInUT* father, Team* team);
     permutation_t getInternSpirit()const;
 
     void addMatch(int i = 1);
@@ -26,6 +27,7 @@ public:
 
     int getGamesPlayed()const;
     NodeInUT* getFather()const;
+    Player* getPlayer()const;
     Team* getTeam();
 
     void treeContraction();

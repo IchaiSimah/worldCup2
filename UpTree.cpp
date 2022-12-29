@@ -1,7 +1,7 @@
 #include "UpTree.h"
 
 
-NodeInUT::NodeInUT(int id,  int gamesPlayed, const permutation_t internSpirit, Player* player, NodeInUT* father, Team* team):
+NodeInUT::NodeInUT(int id,  int gamesPlayed, const permutation_t& internSpirit, Player* player, NodeInUT* father, Team* team):
                                                                                 id(id),
                                                                                 player(player),
                                                                                 father(father),
@@ -70,3 +70,7 @@ void NodeInUT::setGamePlayed(int num){
 Team* NodeInUT::getTeam(){
         return team;
     }
+
+Player *NodeInUT::getPlayer() const {
+    return player;
+}

@@ -42,16 +42,18 @@ StatusType world_cup_t::remove_team(int teamId){
 
 StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t &spirit, int gamesPlayed,
                                    int ability, int cards, bool goalKeeper){
+
     if (playerId <= 0 || teamId <= 0 /*|| if spirit not good */ ||gamesPlayed < 0|| cards < 0 ) return StatusType::INVALID_INPUT;
     if (playersTable.find(playerId)!=-1|| AVL_team_by_id.find(teamId)== nullptr) return  StatusType::FAILURE;
 
 	Team* team = AVL_team_by_id.find(teamId)->data;
-	Player* newPlayer= new Player(playerId, spirit, gamesPlayed, ability, cards, goalKeeper);
+	Player* newPlayer= new Player(ability, cards, goalKeeper);
 	playersTable.insert(playerId, newPlayer);
 	team->addSpirit(spirit);
 	permutation_t internSpirit = team->getLeader()->getNode()->getInternSpirit().inv()*team->getTotalSpirit();
 	int tmpGamesPlayed = gamesPlayed - team->getLeader()->getNode()->getGamesPlayed();
-	NodeInUT node(playerId, newPlayer, team->getLeader()->getNode(), team, tmpGamesPlayed, internSpirit);
+	NodeInUT* newNode = new NodeInUT(playerId, gamesPlayed, internSpirit, newPlayer, team->getLeader()->getNode(), team);
+    newPlayer->setNode(newNode);
 	team->updateStats(newPlayer);
     return StatusType::SUCCESS;
 }
@@ -59,13 +61,13 @@ StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t
 
 output_t<int> world_cup_t::play_match(int teamId1, int teamId2){
 
-	 if (teamId1 <= 0 || teamId2 <= 0 ||teamId1 == teamId2) return StatusType::INVALID_INPUT;
+    if (teamId1 <= 0 || teamId2 <= 0 ||teamId1 == teamId2) return StatusType::INVALID_INPUT;
 	if(!AVL_team_by_id.find(teamId1)||!AVL_team_by_id.find(teamId2)) return  StatusType::FAILURE;
+
 	Team* team1 = AVL_team_by_id.find(teamId1)->data;
 	Team* team2 = AVL_team_by_id.find(teamId2)->data;
-	if(!team1->canPlay()||!team2->canPlay()){
-		return  StatusType::FAILURE;
-	}
+	if(!team1->canPlay()||!team2->canPlay()) return  StatusType::FAILURE;
+
 	team1->getLeader()->getNode()->addMatch();
 	team2->getLeader()->getNode()->addMatch();
 	Team* winner = nullptr;
@@ -128,10 +130,11 @@ Team* getTeam(Player* player){
 
 StatusType world_cup_t::add_player_cards(int playerId, int cards){
 
-    if (playerId <= 0)return StatusType::INVALID_INPUT;
+    if (playerId <= 0) return StatusType::INVALID_INPUT;
     int indexOfPlayer = playersTable.find(playerId);
     if ((indexOfPlayer == -1) || !(playersTable.getT(indexOfPlayer)->getNode()->getTeam()->isInGame())) return StatusType::FAILURE;
-    if (indexOfPlayer != -1){
+
+    else {
 		Player* player = playersTable.getT(indexOfPlayer);
         player->addCards(cards);
         getTeam(player)->addCards(cards);
