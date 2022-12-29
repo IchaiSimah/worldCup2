@@ -12,9 +12,22 @@ private:
     NodeInUT* leader;
     Team* team;
     int gamesPlayed;
-    int internSpirit;
-    int numOfPlayers;
+    permutation_t internSpirit;
+public: 
+    NodeInUT(int id, Player* player, NodeInUT* leader, Team* team, int gamesPlayed, 
+                                const permutation_t internSpirit, int numOfPlayers);
+    permutation_t getInternSpirit();
+    void addMatch(int i = 1);
+    int getGamesPlayed();
+    NodeInUT* getLeader()const;
+    void setInternSpirit(permutation_t &spirit);
+    void setLeader(const NodeInUT* leader);
 };
+
+// Class UpTree{
+//     private:
+    
+// }
 
 
 

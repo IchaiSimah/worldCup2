@@ -19,6 +19,9 @@ public:
     Team* getTeam();
     int getNumGames();
     int getCards();
+    NodeInUT* getNode();
+    int getAbility()const;
+    bool isGoalKeeper()const;
 };
 
 
