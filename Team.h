@@ -21,7 +21,7 @@ public:
     void addCards(int i);
     void addGoalKeeper(int num = 1);
     void addAbility(int ability);
-    void updateStats(Player* player);
+    void updateStats(Player* player, const permutation_t& spirit);
     void setLeader(Player* player);
     void addSpirit(const permutation_t& spirit);
     void addPoints(int pointsToAdd);

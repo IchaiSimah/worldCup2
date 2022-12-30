@@ -54,7 +54,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t
 	int tmpGamesPlayed = gamesPlayed - team->getLeader()->getNode()->getGamesPlayed();
 	NodeInUT* newNode = new NodeInUT(playerId, gamesPlayed, internSpirit, newPlayer, team->getLeader()->getNode(), team);
     newPlayer->setNode(newNode);
-	team->updateStats(newPlayer);
+	team->updateStats(newPlayer, spirit);
     return StatusType::SUCCESS;
 }
 
@@ -185,7 +185,7 @@ StatusType world_cup_t::buy_team(int teamId1, int teamId2){
 	NodeInUT* leader1 = team1->getLeader()->getNode();
 	NodeInUT* leader2 = team2->getLeader()->getNode();
 	if(team1->getNumOfPlayers() < team2->getNumOfPlayers()){
-		leader1->addMatch(-leader2->getGamesPlayed());
+		leader1->addMatch(-(leader2->getGamesPlayed()));
 		permutation_t newSpirit = team1->getTotalSpirit() * leader2->getInternSpirit();
 		leader2->setInternSpirit(newSpirit);
 		newSpirit = leader2->getInternSpirit().inv() * leader1->getInternSpirit();
@@ -193,7 +193,7 @@ StatusType world_cup_t::buy_team(int teamId1, int teamId2){
 		leader1->setLeader(leader2);
 	}
 	else{
-		leader2->addMatch(-leader1->getGamesPlayed());
+		leader2->addMatch(-(leader1->getGamesPlayed()));
 		permutation_t newSpirit = team1->getTotalSpirit() * leader2->getInternSpirit();
 		leader2->setInternSpirit(newSpirit);
 		leader2->setLeader(leader1);
