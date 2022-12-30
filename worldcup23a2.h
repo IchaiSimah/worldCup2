@@ -16,14 +16,14 @@
 #define WORLDCUP23A2_H_
 
 #include "wet2util.h"
-#include "AVL_TREE_TEMPLATE.h"
 #include "Team.h"
 #include "HashTable.h"
-#include "UpTree.h"
+
 
 class world_cup_t {
 private:
 	AVL<int , Team*> AVL_team_by_id = AVL<int, Team *>();
+    AVL<AbilityId, Team*> AVL_team_by_ability = AVL<AbilityId, Team*>();
 	HashTable<Player*> playersTable = HashTable<Player*>(new Player(-1));
 public:
 	// <DO-NOT-MODIFY> {

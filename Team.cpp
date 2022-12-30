@@ -7,22 +7,24 @@ Team::Team(int teamId):id(teamId),
                        totalCards(0),
                        inGame(true),
                        points(0),
-                       numOfPlayers(0)
-{}
-void Team::updateStats(Player* player, const permutation_t& spirit){
+                       numOfPlayers(0){
+    abilityId = AbilityId(0,id);
+}
+
+void Team::updateStats(Player* player, const permutation_t& spirit, int ability){
     if(!leader){
 		leader = player;
 	}
 	if(player->isGoalKeeper()){
 		numOfGoalKeepers++;
 	}
-	totalAbility+=player->getAbility();
+	totalAbility+=ability;
     numOfPlayers++;
     totalSpirit = totalSpirit * spirit;
+    abilityId = AbilityId(totalAbility,id);
 }
 
-// public:
-//     Team(int teamId): id(teamId){}
+
 void Team::addCards(int i){
     totalCards+=i;
 }
@@ -71,4 +73,16 @@ int Team::getTotalCards()const{
 }
 int Team::getNumOfGK()const{
     return numOfGoalKeepers;
+}
+
+void Team::setNodeAbility(Node<int, Team*>* node) {
+    nodeAbility=node;
+}
+
+int Team::getId() {
+    return id;
+}
+
+AbilityId Team::getAbilityId() {
+    return abilityId;
 }

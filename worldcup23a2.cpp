@@ -20,6 +20,7 @@ StatusType world_cup_t::add_team(int teamId){
         return StatusType::ALLOCATION_ERROR;
     }
     AVL_team_by_id.insert(teamId, new_team);
+    AVL_team_by_ability.insert(new_team->getAbilityId(), new_team);
     return StatusType::SUCCESS;
 }
 
@@ -47,14 +48,17 @@ StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t
     if (playersTable.find(playerId)!=-1|| AVL_team_by_id.find(teamId)== nullptr) return  StatusType::FAILURE;
 
 	Team* team = AVL_team_by_id.find(teamId)->data;
-	Player* newPlayer= new Player(ability, cards, goalKeeper);
-	playersTable.insert(playerId, newPlayer);
-	team->addSpirit(spirit);
-	permutation_t internSpirit = team->getLeader()->getNode()->getInternSpirit().inv()*team->getTotalSpirit();
-	int tmpGamesPlayed = gamesPlayed - team->getLeader()->getNode()->getGamesPlayed();
-	NodeInUT* newNode = new NodeInUT(playerId, gamesPlayed, internSpirit, newPlayer, team->getLeader()->getNode(), team);
+    AVL_team_by_ability.remove(AbilityId(teamId,team->getTotalAbility()));
+	Player* newPlayer= new Player(playerId, ability, cards, goalKeeper);
+    team->updateStats(newPlayer, spirit, ability);
+    AVL_team_by_ability.insert(AbilityId(teamId,team->getTotalAbility()),team);
+	permutation_t internSpirit = spirit;
+    if (playerId!=team->getLeader()->getPlayerId())internSpirit= team->getLeader()->getNode()->getInternSpirit().inv()*team->getTotalSpirit();
+	int tmpGamesPlayed = gamesPlayed;
+    if (playerId!=team->getLeader()->getPlayerId())tmpGamesPlayed = gamesPlayed - team->getLeader()->getNode()->getGamesPlayed();
+	NodeInUT* newNode = new NodeInUT(playerId, tmpGamesPlayed, internSpirit, newPlayer, team->getLeader()->getNode(), team);
     newPlayer->setNode(newNode);
-	team->updateStats(newPlayer, spirit);
+    playersTable.insert(playerId, newPlayer);
     return StatusType::SUCCESS;
 }
 
@@ -63,7 +67,7 @@ output_t<int> world_cup_t::play_match(int teamId1, int teamId2){
 
     if (teamId1 <= 0 || teamId2 <= 0 ||teamId1 == teamId2) return StatusType::INVALID_INPUT;
 	if(!AVL_team_by_id.find(teamId1)||!AVL_team_by_id.find(teamId2)) return  StatusType::FAILURE;
-
+    int to_return =0;
 	Team* team1 = AVL_team_by_id.find(teamId1)->data;
 	Team* team2 = AVL_team_by_id.find(teamId2)->data;
 	if(!team1->canPlay()||!team2->canPlay()) return  StatusType::FAILURE;
@@ -76,19 +80,26 @@ output_t<int> world_cup_t::play_match(int teamId1, int teamId2){
 	}
 	else if(team1->getTotalAbility() + team1->getPoints() < team2->getTotalAbility() + team2->getPoints()){
 		winner = team2;
+        to_return=3;
 	}
 	else if(team1->getTotalAbility() > team2->getTotalAbility()){
 		winner = team1;
+        to_return=1;
 	}
 	else if(team1->getTotalAbility() < team2->getTotalAbility()){
 		winner = team2;
+        to_return=2;
 	}
 	else if(team1->getTotalSpirit().strength() > team2->getTotalSpirit().strength()){
 		winner = team1;
+        to_return=4;
+
 	}
 	else if(team1->getTotalSpirit().strength() < team2->getTotalSpirit().strength()){
 		winner = team2;
+
 	}
+
 	if(winner){
 		winner->addPoints(3);
 	}
@@ -96,7 +107,7 @@ output_t<int> world_cup_t::play_match(int teamId1, int teamId2){
 		team1->addPoints(1);
 		team2->addPoints(1);
 	}
-	return StatusType::SUCCESS;
+	return to_return;
 }
 
 
@@ -123,7 +134,7 @@ output_t<int> world_cup_t::num_played_games_for_player(int playerId){
 
 Team* getTeam(Player* player){	
 	NodeInUT* playerNode = player->getNode();
-	if(playerNode->getFather() ->getFather()) playerNode->treeContraction();
+	if(playerNode->getFather()->getFather()) playerNode->treeContraction();
     return playerNode->getFather()->getTeam();
 }
 
@@ -139,6 +150,7 @@ StatusType world_cup_t::add_player_cards(int playerId, int cards){
         player->addCards(cards);
         getTeam(player)->addCards(cards);
     }
+    return StatusType::SUCCESS;
 }
 
 
@@ -153,13 +165,14 @@ output_t<int> world_cup_t::get_player_cards(int playerId){
 
 
 output_t<int> world_cup_t::get_team_points(int teamId){
+    if(!AVL_team_by_id.find(teamId)) return StatusType::FAILURE;
 	return AVL_team_by_id.find(teamId)->data->getPoints();
 }
 
 
 output_t<int> world_cup_t::get_ith_pointless_ability(int i){
-	// TODO: Your code goes here
-	return 12345;
+    if (!AVL_team_by_id.get_size()||i<0||i>=AVL_team_by_id.get_size()) return StatusType::FAILURE;
+    return AVL_team_by_ability.select(i)->data->getId();
 }
 
 

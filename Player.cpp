@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(int ability, int cards, bool goalKeeper): ability(ability),cards(cards), goalKeeper(goalKeeper){}
+Player::Player(int id, int ability, int cards, bool goalKeeper): id(id), ability(ability),cards(cards), goalKeeper(goalKeeper){}
 
 void Player::addCards(int cardsToAdd){
         cards+=cardsToAdd;
@@ -37,5 +37,5 @@ void Player::setNode(NodeInUT *node) {
 }
 
 int Player::getPlayerId() {
-    return getNode()->getId();
+    return id;
 }

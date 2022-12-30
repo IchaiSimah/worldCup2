@@ -7,14 +7,14 @@
 
 class Player{
 private:
-
+    int id;
     int ability;
     int cards;
     bool goalKeeper;
     NodeInUT* nodeInUT;
 
 public:
-    Player(int ability=0, int cards=0, bool goalKeeper=false);
+    Player(int id=0, int ability=0, int cards=0, bool goalKeeper=false);
     void addCards(int cardsToAdd);
     void setNode(NodeInUT* node);
 

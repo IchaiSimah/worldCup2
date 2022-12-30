@@ -13,6 +13,7 @@ class Node{
 public:
     T key;
     S data;
+    int rank;
     Node* left;
     Node* right;
 };
@@ -143,55 +144,7 @@ public:
             delete node->data;
             delete node;
         }
-    }// recursive helper clear tree and data
-
-
-    // void inorderFunc(Node<T,S>* node){
-    //     if (node == NULL){
-    //         return;
-    //     }
-    //     inorderFunc(node->left);
-    //     cout << node->data << "  ";
-    //     inorderFunc(node->right);
-
-    // }//print node's data with in-order traversal
-
-    // void AVL_to_array_inorder(S *arr){
-    //     int i=0;
-    //     AVL_to_array_inorder_helper(root,arr,&i);
-    // }
-
-    // void AVL_to_array_inorder_helper(Node<T,S>* firstNode,S *arr,int *i){
-    //     if(firstNode== nullptr){
-    //         return;
-    //     }
-    //     AVL_to_array_inorder_helper(firstNode->left,arr,i);
-    //     arr[*i]=firstNode->data;
-    //     (*i)++;
-    //     AVL_to_array_inorder_helper(firstNode->right,arr,i);
-    // }
-
-
-
-    // void array_to_AVL_inorder(T *arrKey,S *arrData, int i){
-    //     array_to_AVL_inorder_helper(&root, arrKey, arrData, i);
-    // }
-
-    // void array_to_AVL_inorder_helper(Node<T,S>** firstNode,T *arrKey,S *arrData, int i){
-    //     if(i==0){
-    //         return;
-    //     }
-    //     *firstNode = new Node<T,S>;
-    //     (*firstNode)->key =arrKey[i/2];
-    //     (*firstNode)->data = arrData[i/2];
-    //     (*firstNode)->left = nullptr;
-    //     (*firstNode)->right = nullptr;
-    //     size++;
-    //     array_to_AVL_inorder_helper(&((*firstNode)->left),arrKey,arrData,(i/2));
-    //     array_to_AVL_inorder_helper(&((*firstNode)->right), arrKey+((i/2)+1), arrData+((i/2)+1), i-((i/2)+1));
-    // }
-
-
+    }
 
     S getData(Node<T,S>* node) const{
         return node->data;
@@ -226,92 +179,18 @@ public:
     S dataOfTheMax() const{
         return findMax(root)->data;
     }
+
+
+    Node<T,S>* select(int k){
+        return sel(root, k);
+    }
+
+    Node<T,S>* sel(Node<T,S>* node, int k){
+        if(node->left->rank == k-1)	return node;
+        if(node->left->rank > k-1) return sel(node->left, k);
+        return sel(node->right,k-(node->left->rank)-1);
+    }
 /**************************************************************************************/
-
-
-//     S getPreviousInorder(T key) const {
-// //        if(key == nullptr){
-// //            return nullptr;
-// //        }
-//         Node<T,S>* minNode = root;
-//         while(minNode->left){
-//             minNode = minNode->left;
-//         }
-//         if(minNode->key == key){
-//             return nullptr;
-//         }
-//         Node<T, S> *nearestBefore = root;
-//         Node<T, S> *trackNode = root;
-//         while (trackNode->key != key) {
-//             if (key > trackNode->key) {
-//                 if (nearestBefore->key > key || trackNode->key > nearestBefore->key) {
-//                     nearestBefore = trackNode;
-//                 }
-//                 trackNode = trackNode->right;
-//             } else {
-//                 trackNode = trackNode->left;
-//             }
-//             if (trackNode == nullptr) {
-//                 return nullptr;
-//             }
-//         }
-//         if (trackNode->left) {
-//             trackNode = trackNode->left;
-//             while (trackNode->right) {
-//                 trackNode = trackNode->right;
-//             }
-
-//             if (trackNode->key > nearestBefore->key || nearestBefore->key > key) {
-//                 return trackNode->data;
-//             } else {
-//                 return nearestBefore->data;
-//             }
-//         }
-//         return nearestBefore->data;
-
-//     }
-//     S getNextInorder(T key)const{
-// //        if(key == nullptr){
-// //            return nullptr;
-// //        }
-//         Node<T,S>* maxNode = root;
-//         while(maxNode->right){
-//             maxNode = maxNode->right;
-//         }
-//         if(maxNode->key == key){
-//             return nullptr;
-//         }
-//         Node<T,S>* nearestNext = root;
-//         Node<T,S>* trackNode = root;
-//         while(trackNode->key != key){
-//             if (key > trackNode->key){
-//                 trackNode = trackNode->right;
-//             }
-//             else{
-//                 if(key > nearestNext->key || nearestNext->key > trackNode->key){
-//                     nearestNext = trackNode;
-//                 }
-//                 trackNode = trackNode->left;
-//             }
-//             if(trackNode==nullptr){
-//                 return nullptr;
-//             }
-//         }
-//         if(trackNode->right) {
-//             trackNode = trackNode->right;
-//             while (trackNode->left) {
-//                 trackNode = trackNode->left;
-//             }
-//             if (nearestNext->key > trackNode->key || key > nearestNext->key) {
-//                 return trackNode->data;
-//             } else {
-//                 return nearestNext->data;
-//             }
-//         }
-
-//         return nearestNext->data;
-//     }
-
 
 
 /* functions that help to keep the tree balanced */
@@ -351,12 +230,22 @@ public:
         return height(node->left)-height(node->right);
     }
 
+    void updateRank(Node<T,S>* node){
+        int updating = 1;
+        if(node->left != nullptr)
+            updating += node->left->rank;
+        if(node->right != nullptr)
+            updating += node->right->rank;
+        node->rank = updating;
+    }
 
     Node<T,S> * rr_rotation(Node<T,S>* father){
         Node<T,S>* node;
         node = father->right;
         father->right = node->left;
         node->left = father;
+        updateRank(father);
+        updateRank(node);
         return node;
     }
 
@@ -374,11 +263,13 @@ public:
         return ll_rotation(father);
     }
 
-    Node<T,S> * ll_rotation(Node<T,S> *parent){
+    Node<T,S> * ll_rotation(Node<T,S> *father){
         Node<T,S>* node;
-        node = parent->left;
-        parent->left = node->right;
-        node->right = parent;
+        node = father->left;
+        father->left = node->right;
+        node->right = father;
+        updateRank(father);
+        updateRank(node);
         return node;
     }
 
