@@ -194,14 +194,13 @@ public:
         }
         if (rank(current->left) == k ) {
             return current;
-        } else {
-            if (rank(current->left) > k) {
+        } else if (rank(current->left) > k) {
                 return sel(current->left, k);
-            } else {
+            }
+        else {
                 return sel(current->right, k - rank(current->left) - 1);
             }
         }
-    }
 
 /**************************************************************************************/
 
