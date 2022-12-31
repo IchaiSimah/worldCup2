@@ -1,6 +1,10 @@
 #include "Player.h"
 
-Player::Player(int id, int ability, int cards, bool goalKeeper): id(id), ability(ability),cards(cards), goalKeeper(goalKeeper){}
+Player::Player(int id, int ability, int cards, bool goalKeeper): id(id),
+                                                                 ability(ability),
+                                                                 cards(cards),
+                                                                 goalKeeper(goalKeeper),
+                                                                 nodeInUT(nullptr){}
 
 void Player::addCards(int cardsToAdd){
         cards+=cardsToAdd;

@@ -54,9 +54,9 @@ StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t
     team->updateStats(newPlayer, spirit, ability);
     AVL_team_by_ability.insert(AbilityId(teamId,team->getTotalAbility()),team);
 	permutation_t internSpirit = spirit;
-    if (playerId!=team->getLeader()->getPlayerId())internSpirit= team->getLeader()->getNode()->getInternSpirit().inv()*team->getTotalSpirit();
+    if (playerId != team->getLeader()->getPlayerId()) internSpirit= team->getLeader()->getNode()->getInternSpirit().inv() * team->getTotalSpirit();
 	int tmpGamesPlayed = gamesPlayed;
-    if (playerId!=team->getLeader()->getPlayerId())tmpGamesPlayed = gamesPlayed - team->getLeader()->getNode()->getGamesPlayed();
+    if (playerId != team->getLeader()->getPlayerId())tmpGamesPlayed = gamesPlayed - team->getLeader()->getNode()->getGamesPlayed();
 	NodeInUT* newNode = new NodeInUT(playerId, tmpGamesPlayed, internSpirit, newPlayer, team->getLeader()->getNode(), team);
     newPlayer->setNode(newNode);
     playersTable.insert(playerId, newPlayer);
@@ -78,33 +78,27 @@ output_t<int> world_cup_t::play_match(int teamId1, int teamId2){
 	Team* winner = nullptr;
 	if(team1->getTotalAbility() + team1->getPoints() > team2->getTotalAbility() + team2->getPoints()){
 		winner = team1;
+        to_return = 1;
 	}
 	else if(team1->getTotalAbility() + team1->getPoints() < team2->getTotalAbility() + team2->getPoints()){
 		winner = team2;
         to_return=3;
 	}
-	else if(team1->getTotalAbility() > team2->getTotalAbility()){
-		winner = team1;
-        to_return=1;
-	}
-	else if(team1->getTotalAbility() < team2->getTotalAbility()){
-		winner = team2;
-        to_return=2;
-	}
 	else if(team1->getTotalSpirit().strength() > team2->getTotalSpirit().strength()){
 		winner = team1;
-        to_return=4;
+        to_return=2;
 
 	}
 	else if(team1->getTotalSpirit().strength() < team2->getTotalSpirit().strength()){
 		winner = team2;
-
+        to_return=4;
 	}
 
 	if(winner){
 		winner->addPoints(3);
 	}
 	else{
+        to_return = 0;
 		team1->addPoints(1);
 		team2->addPoints(1);
 	}
@@ -121,13 +115,12 @@ output_t<int> world_cup_t::num_played_games_for_player(int playerId){
     }
 
     NodeInUT* playerNode = playersTable.getT(playersTable.find(playerId))->getNode();
-	if(playerNode->getFather()->getFather()){
-	playerNode->treeContraction();}
-	int playedGames=0;
-	while (playerNode){
-		playedGames+=playerNode->getGamesPlayed();
-		playerNode = playerNode->getFather();
-	}
+    if(!playerNode->getFather()){
+        return playerNode->getGamesPlayed();
+    }
+	if( playerNode->getFather()->getFather()){
+	playerNode->treeContraction();
+    }
     return playerNode->getGamesPlayed() + playerNode->getFather()->getGamesPlayed();
 }
 
@@ -135,7 +128,7 @@ output_t<int> world_cup_t::num_played_games_for_player(int playerId){
 
 Team* getTeam(Player* player){	
 	NodeInUT* playerNode = player->getNode();
-	if(playerNode->getFather()->getFather()) playerNode->treeContraction();
+	if(playerNode->getFather() && playerNode->getFather()->getFather()) playerNode->treeContraction();
     return playerNode->getFather()->getTeam();
 }
 
