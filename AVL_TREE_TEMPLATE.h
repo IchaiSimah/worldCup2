@@ -193,10 +193,10 @@ int rank(Node<T,S>* node){
         if (!current) {
             return nullptr;
         }
-        if (rank(current->left) == k - 1) {
+        if (rank(current->left) == k ) {
             return current;
         } else {
-            if (rank(current->left) > k - 1) {
+            if (rank(current->left) > k) {
                 return sel(current->left, k);
             } else {
                 return sel(current->right, k - rank(current->left) - 1);
