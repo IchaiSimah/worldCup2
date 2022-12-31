@@ -129,7 +129,10 @@ output_t<int> world_cup_t::num_played_games_for_player(int playerId){
 Team* getTeam(Player* player){	
 	NodeInUT* playerNode = player->getNode();
 	if(playerNode->getFather() && playerNode->getFather()->getFather()) playerNode->treeContraction();
-    return playerNode->getFather()->getTeam();
+    if(playerNode->getFather()) {
+        return playerNode->getFather()->getTeam();
+    }
+    return playerNode->getTeam();
 }
 
 
