@@ -178,8 +178,11 @@ output_t<permutation_t> world_cup_t::get_partial_spirit(int playerId){
     int indexOfPlayer = playersTable.find(playerId);
     if (indexOfPlayer == -1) return StatusType::FAILURE;
 
-	permutation_t partialSpirit;
+
 	NodeInUT* playerNode = playersTable.getT(indexOfPlayer)->getNode();
+    if(!playerNode->getFather()){
+        return playerNode->getInternSpirit();
+    }
 	if(playerNode->getFather()->getFather()){
 	playerNode->treeContraction();}
 	return playerNode->getFather()->getInternSpirit() * playerNode->getInternSpirit();
