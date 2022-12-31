@@ -180,16 +180,32 @@ public:
         return findMax(root)->data;
     }
 
+int rank(Node<T,S>* node){
+    if (!node) return 0;
+    return node->rank;
+    }
 
     Node<T,S>* select(int k){
         return sel(root, k);
     }
 
-    Node<T,S>* sel(Node<T,S>* node, int k){
-        if(node->left->rank == k-1)	return node;
-        if(node->left->rank > k-1) return sel(node->left, k);
-        return sel(node->right,k-(node->left->rank)-1);
+    Node<T,S>* sel(Node<T,S>* current, int k) {
+        if (!current) {
+            return nullptr;
+        }
+        if (rank(current->left) == k - 1) {
+            return current;
+        } else {
+            if (rank(current->left) > k - 1) {
+                return sel(current->left, k);
+            } else {
+                return sel(current->right, k - rank(current->left) - 1);
+            }
+        }
     }
+
+
+
 /**************************************************************************************/
 
 
