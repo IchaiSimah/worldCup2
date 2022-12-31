@@ -49,10 +49,10 @@ StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t
     if (playersTable.find(playerId)!=-1|| AVL_team_by_id.find(teamId)== nullptr) return  StatusType::FAILURE;
 
 	Team* team = AVL_team_by_id.find(teamId)->data;
-    AVL_team_by_ability.remove(AbilityId(teamId,team->getTotalAbility()));
+    AVL_team_by_ability.remove(AbilityId(team->getTotalAbility(),teamId));
 	Player* newPlayer= new Player(playerId, ability, cards, goalKeeper);
     team->updateStats(newPlayer, spirit, ability);
-    AVL_team_by_ability.insert(AbilityId(teamId,team->getTotalAbility()),team);
+    AVL_team_by_ability.insert(AbilityId(team->getTotalAbility(), teamId),team);
 	permutation_t internSpirit = spirit;
     if (playerId != team->getLeader()->getPlayerId()) internSpirit= team->getLeader()->getNode()->getInternSpirit().inv() * team->getTotalSpirit();
 	int tmpGamesPlayed = gamesPlayed;
