@@ -13,7 +13,7 @@ class Node{
 public:
     T key;
     S data;
-    int rank;
+    int rank=1;
     Node* left;
     Node* right;
 };
@@ -180,9 +180,8 @@ public:
         return findMax(root)->data;
     }
 
-int rank(Node<T,S>* node){
-    if (!node) return 0;
-    return node->rank;
+    int rank(Node<T,S>* node){
+    return (node == nullptr) ? 0 : node->rank;
     }
 
     Node<T,S>* select(int k){
