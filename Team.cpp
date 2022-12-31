@@ -86,3 +86,7 @@ int Team::getId() {
 AbilityId Team::getAbilityId() {
     return abilityId;
 }
+
+void Team::loose() {
+    inGame= false;
+}

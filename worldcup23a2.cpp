@@ -34,6 +34,7 @@ StatusType world_cup_t::remove_team(int teamId){
     }
     Node<int, Team *> *to_delete = AVL_team_by_id.find(teamId);
     if (to_delete){
+        to_delete->data->loose();
         AVL_team_by_id.remove(teamId);
         return  StatusType::SUCCESS;
     }

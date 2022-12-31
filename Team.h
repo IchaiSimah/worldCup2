@@ -53,7 +53,7 @@ public:
     void increaseNumOfPlayers(int num);
     void setNodeAbility(Node<int, Team*>*);
 
-
+    void loose();
     bool isInGame()const;
     Player* getLeader()const;
     permutation_t getTotalSpirit()const;
