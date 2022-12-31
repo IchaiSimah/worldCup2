@@ -53,7 +53,7 @@ public:
     }
 
     int find (int key){
-        int k = 0, i =0;
+        int k = 1, i = doubleHashing(k,0);
         while (m_table[i] != nullptr && m_table[i]->getPlayerId() != key){
             i= doubleHashing(key, k);
             k++;
