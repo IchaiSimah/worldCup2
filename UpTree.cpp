@@ -61,7 +61,9 @@ void NodeInUT::setLeader(NodeInUT* newFather){
     father = newFather;
     }
 
-
+void NodeInUT::setTeam(Team* newTeam){
+    team=newTeam;
+}
 void NodeInUT::setGamePlayed(int num){
         gamesPlayed = num;
     }

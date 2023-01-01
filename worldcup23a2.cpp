@@ -136,16 +136,28 @@ Team* getTeam(Player* player){
 }
 
 
-StatusType world_cup_t::add_player_cards(int playerId, int cards){
+StatusType world_cup_t::add_player_cards(int playerId, int cards) {
 
     if (playerId <= 0) return StatusType::INVALID_INPUT;
     int indexOfPlayer = playersTable.find(playerId);
-    if ((indexOfPlayer == -1) || !(playersTable.getT(indexOfPlayer)->getNode()->getTeam()->isInGame())) return StatusType::FAILURE;
-
+    if (indexOfPlayer == -1) return StatusType::FAILURE;
+    Player *player = playersTable.getT(indexOfPlayer);
+    NodeInUT *playerNode = player->getNode();
+    Team *team = nullptr;
+    if (!playerNode->getFather()) {
+        team = playerNode->getTeam();
+    }
     else {
-		Player* player = playersTable.getT(indexOfPlayer);
+        if(playerNode->getFather()->getFather())
+        {
+            playerNode->treeContraction();
+        }
+        team = playerNode->getFather()->getTeam();
+    }
+    if (!team->isInGame())return StatusType::FAILURE;
+    else {
         player->addCards(cards);
-        getTeam(player)->addCards(cards);
+        team->addCards(cards);
     }
     return StatusType::SUCCESS;
 }
@@ -195,22 +207,29 @@ StatusType world_cup_t::buy_team(int teamId1, int teamId2){
 	if(!AVL_team_by_id.find(teamId1)||!AVL_team_by_id.find(teamId2)) return  StatusType::FAILURE;
 	Team* team1 = AVL_team_by_id.find(teamId1)->data;
 	Team* team2 = AVL_team_by_id.find(teamId2)->data;
-	NodeInUT* leader1 = team1->getLeader()->getNode();
-	NodeInUT* leader2 = team2->getLeader()->getNode();
-	if(team1->getNumOfPlayers() < team2->getNumOfPlayers()){
-		leader1->addMatch(-(leader2->getGamesPlayed()));
-		permutation_t newSpirit = team1->getTotalSpirit() * leader2->getInternSpirit();
-		leader2->setInternSpirit(newSpirit);
-		newSpirit = leader2->getInternSpirit().inv() * leader1->getInternSpirit();
-		leader1->setInternSpirit(newSpirit);
-		leader1->setLeader(leader2);
-	}
-	else{
-		leader2->addMatch(-(leader1->getGamesPlayed()));
-		permutation_t newSpirit = team1->getTotalSpirit() * leader2->getInternSpirit();
-		leader2->setInternSpirit(newSpirit);
-		leader2->setLeader(leader1);
-	}
+
+    if(team1->getLeader() && team2->getLeader()) {
+        NodeInUT* leader1 = team1->getLeader()->getNode();
+        NodeInUT* leader2 = team2->getLeader()->getNode();
+        if (team1->getNumOfPlayers() < team2->getNumOfPlayers()) {
+            leader1->addMatch(-(leader2->getGamesPlayed()));
+            permutation_t newSpirit = team1->getTotalSpirit() * leader2->getInternSpirit();
+            leader2->setInternSpirit(newSpirit);
+            newSpirit = leader2->getInternSpirit().inv() * leader1->getInternSpirit();
+            leader1->setInternSpirit(newSpirit);
+            leader1->setLeader(leader2);
+            team1->setLeader(leader2->getPlayer());
+            leader2->setTeam(team1);
+        } else {
+            leader2->addMatch(-(leader1->getGamesPlayed()));
+            permutation_t newSpirit = team1->getTotalSpirit() * leader2->getInternSpirit();
+            leader2->setInternSpirit(newSpirit);
+            leader2->setLeader(leader1);
+        }
+    }
+    else if(team2->getLeader()){
+        team1->setLeader(team2->getLeader());
+    }
 	team1->increaseNumOfPlayers(team2->getNumOfPlayers());
 	team1->addCards(team2->getTotalCards());
 	team1->addGoalKeeper(team2->getNumOfGK());

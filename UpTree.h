@@ -23,6 +23,7 @@ public:
     void addMatch(int i = 1);
     void setInternSpirit(permutation_t &spirit);
     void setLeader(NodeInUT* newFather);
+    void setTeam(Team* newTeam);
     void setGamePlayed(int num);
 
     int getGamesPlayed()const;
