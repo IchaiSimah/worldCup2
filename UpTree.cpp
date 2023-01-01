@@ -20,14 +20,17 @@ void NodeInUT::treeContraction(){
         newInternSpirit = leaderFinder->internSpirit * newInternSpirit;
     }
     NodeInUT* tmpNode = this;
+
     while (tmpNode->father != leaderFinder){
         int tmpGamesPlayed = tmpNode->gamesPlayed;
         permutation_t tmpInternSpirit = tmpNode ->internSpirit;
-        tmpNode->gamesPlayed = newPlayedGames - father->gamesPlayed;
-        tmpNode->internSpirit = father->internSpirit.inv() * newInternSpirit;
+        tmpNode->gamesPlayed = newPlayedGames - leaderFinder->gamesPlayed;
+        tmpNode->internSpirit = leaderFinder->internSpirit.inv() * newInternSpirit;
         newPlayedGames-=tmpGamesPlayed;
         newInternSpirit = newInternSpirit * tmpInternSpirit.inv();
+        NodeInUT* fatherNode = tmpNode->father;
         tmpNode->father = leaderFinder;
+        tmpNode = fatherNode;
     }
 }
 

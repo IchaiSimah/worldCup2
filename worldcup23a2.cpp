@@ -195,6 +195,11 @@ output_t<permutation_t> world_cup_t::get_partial_spirit(int playerId){
     if (indexOfPlayer == -1) return StatusType::FAILURE;
 
 	NodeInUT* playerNode = playersTable.getT(indexOfPlayer)->getNode();
+    NodeInUT* tmpNode = playerNode;
+    while (tmpNode->getFather()){
+        tmpNode = tmpNode->getFather();
+    }
+    if (!tmpNode->getTeam()->isInGame()) return StatusType::FAILURE;
     if(!playerNode->getFather()){
         return playerNode->getInternSpirit();
     }
@@ -225,19 +230,21 @@ StatusType world_cup_t::buy_team(int teamId1, int teamId2){
             leader2->setTeam(team1);
         } else {
             leader2->addMatch(-(leader1->getGamesPlayed()));
-            permutation_t newSpirit = team1->getTotalSpirit() * leader2->getInternSpirit();
+            permutation_t newSpirit = leader1->getInternSpirit().inv() * team1->getTotalSpirit() * leader2->getInternSpirit();
             leader2->setInternSpirit(newSpirit);
             leader2->setLeader(leader1);
         }
     }
     else if(team2->getLeader()){
         team1->setLeader(team2->getLeader());
+        team1->getLeader()->getNode()->setTeam(team1);
     }
 	team1->increaseNumOfPlayers(team2->getNumOfPlayers());
 	team1->addCards(team2->getTotalCards());
 	team1->addGoalKeeper(team2->getNumOfGK());
     AVL_team_by_ability.remove(team1->getAbilityId());
 	team1->addAbility(team2->getTotalAbility());
+    team1->addSpirit(team2->getTotalSpirit());
     AVL_team_by_ability.insert(team1->getAbilityId(), team1);
     //AVL_team_by_id.find(teamId2)->data->loose();
 	AVL_team_by_id.remove(teamId2);
