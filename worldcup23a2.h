@@ -18,6 +18,7 @@
 #include "wet2util.h"
 #include "Team.h"
 #include "HashTable.h"
+#include "AVL_TREE_TEMPLATE.h"
 
 
 class world_cup_t {
