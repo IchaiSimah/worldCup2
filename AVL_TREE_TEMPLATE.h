@@ -50,7 +50,9 @@ public:
         } else if (node->key < key||node->key == key) {
             node->right = insertFunc(node->right, key, data);
             node = balance(node);
-        } return node;
+        }
+        updateRank(node);
+        return node;
     }
 
 
@@ -112,6 +114,7 @@ public:
         }
         if (node == nullptr) return node;
 
+        updateRank(node);
         node = balance(node); // We now have to balance the tree
         return node;
     } //recursive helper remove function
@@ -181,7 +184,7 @@ public:
     }
 
     int rank(Node<T,S>* node){
-    return (node == nullptr) ? 0 : node->rank;
+        return (node == nullptr) ? 0 : node->rank;
     }
 
     Node<T,S>* select(int k){

@@ -36,6 +36,7 @@ StatusType world_cup_t::remove_team(int teamId){
     if (to_delete){
         to_delete->data->loose();
         AVL_team_by_id.remove(teamId);
+        AVL_team_by_ability.remove(to_delete->data->getAbilityId());
         return  StatusType::SUCCESS;
     }
     return StatusType::FAILURE;
@@ -46,7 +47,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t
                                    int ability, int cards, bool goalKeeper){
 
     if (playerId <= 0 || teamId <= 0 /*|| if spirit not good */ ||gamesPlayed < 0|| cards < 0 ) return StatusType::INVALID_INPUT;
-    if (playersTable.find(playerId)!=-1|| AVL_team_by_id.find(teamId)== nullptr) return  StatusType::FAILURE;
+    if (playersTable.find(playerId)!=-1 || AVL_team_by_id.find(teamId)== nullptr) return  StatusType::FAILURE;
 
 	Team* team = AVL_team_by_id.find(teamId)->data;
     AVL_team_by_ability.remove(AbilityId(team->getTotalAbility(),teamId));
@@ -235,6 +236,7 @@ StatusType world_cup_t::buy_team(int teamId1, int teamId2){
 	team1->addGoalKeeper(team2->getNumOfGK());
 	team1->addAbility(team2->getTotalAbility());
 	AVL_team_by_id.remove(teamId2);
+    AVL_team_by_ability.remove(team2->getAbilityId());
 	delete team2;	
 	return StatusType::SUCCESS;
 }
