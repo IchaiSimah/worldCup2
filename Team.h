@@ -13,15 +13,18 @@ public:
     int ability;
     int id;
     AbilityId(int ability=0, int id=0): ability(ability), id(id){}
+
     bool operator==(AbilityId a){
         if (a.ability==ability && a.id==id) return true;
         return false;
     }
+
     bool operator> (AbilityId a){
         if (ability>a.ability) return true;
         if (ability==a.ability && id>a.id) return true;
         return false;
     }
+
     bool operator<(AbilityId a){
         return (!(*this>a)&& !(*this==a));
     }
@@ -40,7 +43,7 @@ private:
     bool inGame = true;
     int points;
     int numOfPlayers;
-    Node<int, Team*>* nodeAbility;
+
 public:
     Team(int teamId);
     void addCards(int i);
@@ -51,7 +54,6 @@ public:
     void addSpirit(const permutation_t& spirit);
     void addPoints(int pointsToAdd);
     void increaseNumOfPlayers(int num);
-    void setNodeAbility(Node<int, Team*>*);
 
     void loose();
     bool isInGame()const;

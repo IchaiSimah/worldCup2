@@ -32,11 +32,11 @@ StatusType world_cup_t::remove_team(int teamId){
     if (!AVL_team_by_id.find(teamId)){
         return StatusType::FAILURE;
     }
-    Node<int, Team *> *to_delete = AVL_team_by_id.find(teamId);
+    Node<int, Team *>* to_delete = AVL_team_by_id.find(teamId);
     if (to_delete){
         to_delete->data->loose();
-        AVL_team_by_id.remove(teamId);
         AVL_team_by_ability.remove(to_delete->data->getAbilityId());
+        AVL_team_by_id.remove(teamId);
         return  StatusType::SUCCESS;
     }
     return StatusType::FAILURE;
@@ -155,11 +155,11 @@ StatusType world_cup_t::add_player_cards(int playerId, int cards) {
         }
         team = playerNode->getFather()->getTeam();
     }
-    if (!team->isInGame())return StatusType::FAILURE;
+     if (!team->isInGame()) return StatusType::FAILURE;
     else {
         player->addCards(cards);
         team->addCards(cards);
-    }
+   }
     return StatusType::SUCCESS;
 }
 

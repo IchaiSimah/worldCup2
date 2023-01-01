@@ -8,7 +8,7 @@ Team::Team(int teamId):id(teamId),
                        inGame(true),
                        points(0),
                        numOfPlayers(0){
-    abilityId = AbilityId(0,id);
+                       abilityId = AbilityId(0,teamId);
 }
 
 void Team::updateStats(Player* player, const permutation_t& spirit, int ability){
@@ -21,7 +21,7 @@ void Team::updateStats(Player* player, const permutation_t& spirit, int ability)
 	totalAbility+=ability;
     numOfPlayers++;
     totalSpirit = totalSpirit * spirit;
-    abilityId = AbilityId(totalAbility,id);
+    abilityId = AbilityId(totalAbility,getId());
 }
 
 
@@ -76,9 +76,6 @@ int Team::getNumOfGK()const{
     return numOfGoalKeepers;
 }
 
-void Team::setNodeAbility(Node<int, Team*>* node) {
-    nodeAbility=node;
-}
 
 int Team::getId() {
     return id;
