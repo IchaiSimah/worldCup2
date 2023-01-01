@@ -49,6 +49,7 @@ void Team::addGoalKeeper(int num){
 }
 void Team::addAbility(int ability){
     totalAbility+=ability;
+    abilityId = AbilityId(totalAbility, id);
 }
 bool Team::canPlay()const{
     return numOfGoalKeepers;

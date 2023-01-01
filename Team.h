@@ -17,13 +17,13 @@ public:
         if (a.ability==ability && a.id==id) return true;
         return false;
     }
-    bool operator< (AbilityId a){
+    bool operator> (AbilityId a){
         if (ability>a.ability) return true;
         if (ability==a.ability&& id>a.id) return true;
         return false;
     }
-    bool operator>(AbilityId a){
-        return (!(*this<a)&& !(*this==a));
+    bool operator<(AbilityId a){
+        return (!(*this>a)&& !(*this==a));
     }
 
 };
