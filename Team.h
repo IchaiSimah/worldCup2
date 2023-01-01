@@ -19,7 +19,7 @@ public:
     }
     bool operator> (AbilityId a){
         if (ability>a.ability) return true;
-        if (ability==a.ability&& id>a.id) return true;
+        if (ability==a.ability && id>a.id) return true;
         return false;
     }
     bool operator<(AbilityId a){

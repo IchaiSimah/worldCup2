@@ -40,6 +40,7 @@ public:
             node = new Node<T,S>;
             node->key = key;
             node->data = data;
+            node->rank= 1;
             node->left = nullptr;
             node->right = nullptr;
             return node;
@@ -113,7 +114,6 @@ public:
             delete tmp;
         }
         if (node == nullptr) return node;
-
         updateRank(node);
         node = balance(node); // We now have to balance the tree
         return node;
@@ -247,10 +247,12 @@ public:
 
     void updateRank(Node<T,S>* node){
         int updating = 1;
-        if(node->left != nullptr)
+        if(node->left != nullptr) {
             updating += node->left->rank;
-        if(node->right != nullptr)
+        }
+        if(node->right != nullptr) {
             updating += node->right->rank;
+        }
         node->rank = updating;
     }
 
