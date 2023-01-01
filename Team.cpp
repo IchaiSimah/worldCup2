@@ -52,7 +52,8 @@ void Team::addAbility(int ability){
     abilityId = AbilityId(totalAbility, id);
 }
 bool Team::canPlay()const{
-    return numOfGoalKeepers;
+    if (numOfGoalKeepers>0) return true;
+    return false;
 }
 int Team::getTotalAbility()const{
     return totalAbility;
@@ -86,5 +87,5 @@ AbilityId Team::getAbilityId() {
 }
 
 void Team::loose() {
-    inGame= false;
+    inGame = false;
 }

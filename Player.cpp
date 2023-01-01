@@ -18,22 +18,11 @@ NodeInUT* Player::getNode(){
      return nodeInUT;
     }
 
-int Player::getAbility()const{
-        return ability;
-    }
 
 bool Player::isGoalKeeper()const{
         return goalKeeper;
     }
 
-int Player::getTotalPlayedGames(){
-    NodeInUT* tmpNode = nodeInUT;
-    int playedGames = 0;
-    while (tmpNode){
-		playedGames+= tmpNode->getGamesPlayed();
-		tmpNode = tmpNode->getFather();
-	}
-}// tu fais pas le contraction
 
 
 void Player::setNode(NodeInUT *node) {

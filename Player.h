@@ -21,9 +21,7 @@ public:
     int getCards();
     int getPlayerId();
     NodeInUT* getNode();
-    int getAbility()const;
     bool isGoalKeeper()const;
-    int getTotalPlayedGames();
 };
 
 

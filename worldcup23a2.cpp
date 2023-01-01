@@ -127,39 +127,42 @@ output_t<int> world_cup_t::num_played_games_for_player(int playerId){
 
 
 
-Team* getTeam(Player* player){	
-	NodeInUT* playerNode = player->getNode();
-	if(playerNode->getFather() && playerNode->getFather()->getFather()) playerNode->treeContraction();
-    if(playerNode->getFather()) {
-        return playerNode->getFather()->getTeam();
-    }
-    return playerNode->getTeam();
-}
+//Team* getTeam(Player* player){
+//	NodeInUT* playerNode = player->getNode();
+//	if(playerNode->getFather() && playerNode->getFather()->getFather()) playerNode->treeContraction();
+//    if(playerNode->getFather()) {
+//        return playerNode->getFather()->getTeam();
+//    }
+//    return playerNode->getTeam();
+//}
 
 
 StatusType world_cup_t::add_player_cards(int playerId, int cards) {
 
-    if (playerId <= 0) return StatusType::INVALID_INPUT;
+    if (playerId <= 0|| cards<0){
+        return StatusType::INVALID_INPUT;
+    }
     int indexOfPlayer = playersTable.find(playerId);
-    if (indexOfPlayer == -1) return StatusType::FAILURE;
+    if (indexOfPlayer == -1){
+        return StatusType::FAILURE;
+    }
     Player *player = playersTable.getT(indexOfPlayer);
     NodeInUT *playerNode = player->getNode();
-    Team *team = nullptr;
+    Team *team;
     if (!playerNode->getFather()) {
         team = playerNode->getTeam();
     }
     else {
-        if(playerNode->getFather()->getFather())
-        {
+        if(playerNode->getFather()->getFather()){
             playerNode->treeContraction();
         }
         team = playerNode->getFather()->getTeam();
     }
-     if (!team->isInGame()) return StatusType::FAILURE;
-    else {
-        player->addCards(cards);
-        team->addCards(cards);
-   }
+     if (!team->isInGame()){
+         return StatusType::FAILURE;
+     }
+    player->addCards(cards);
+    team->addCards(cards);
     return StatusType::SUCCESS;
 }
 
@@ -236,6 +239,7 @@ StatusType world_cup_t::buy_team(int teamId1, int teamId2){
     AVL_team_by_ability.remove(team1->getAbilityId());
 	team1->addAbility(team2->getTotalAbility());
     AVL_team_by_ability.insert(team1->getAbilityId(), team1);
+    //AVL_team_by_id.find(teamId2)->data->loose();
 	AVL_team_by_id.remove(teamId2);
     AVL_team_by_ability.remove(team2->getAbilityId());
 
