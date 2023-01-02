@@ -3,24 +3,25 @@
 
 world_cup_t::world_cup_t(): AVL_team_by_id(AVL<int, Team *>()),
                             AVL_team_by_ability(AVL<AbilityId, Team*>()),
-                            playersTable(HashTable<Player*>())
+                            playersTable(HashTable<Player*>()),
+                            deletedTeams(new LinkedList)
 {
     NodeInLinkedList* newNode = new NodeInLinkedList;
-    deletedTeams.first = newNode;
-    deletedTeams.last = newNode;
+    deletedTeams->first = newNode;
+    deletedTeams->last = newNode;
 }
 
 world_cup_t::~world_cup_t(){
     AVL_team_by_id.clearData();
-    NodeInLinkedList* tmpNode = deletedTeams.first->next;
-    delete deletedTeams.first;
+    NodeInLinkedList* tmpNode = deletedTeams->first->next;
+    delete deletedTeams->first;
     while(tmpNode){
         NodeInLinkedList* toDeleteNode = tmpNode;
         tmpNode = tmpNode->next;
         delete toDeleteNode->data;
         delete toDeleteNode;
     }
-
+    delete deletedTeams;
 }
 
 StatusType world_cup_t::add_team(int teamId){
@@ -56,8 +57,8 @@ StatusType world_cup_t::remove_team(int teamId){
         AVL_team_by_id.remove(teamId);
         NodeInLinkedList* newNode = new NodeInLinkedList;
         newNode->data = to_delete->data;
-        deletedTeams.last->next = newNode;
-        deletedTeams.last = newNode;
+        deletedTeams->last->next = newNode;
+        deletedTeams->last = newNode;
         return  StatusType::SUCCESS;
     }
     return StatusType::FAILURE;

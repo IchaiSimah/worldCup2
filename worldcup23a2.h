@@ -35,7 +35,7 @@ private:
 	AVL<int , Team*> AVL_team_by_id;
     AVL<AbilityId, Team*> AVL_team_by_ability;
 	HashTable<Player*> playersTable;
-    LinkedList deletedTeams;
+    LinkedList* deletedTeams;
 public:
 	// <DO-NOT-MODIFY> {
 	
