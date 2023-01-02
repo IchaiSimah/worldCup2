@@ -1,13 +1,13 @@
 #include "worldcup23a2.h"
 
-world_cup_t::world_cup_t(): AVL_team_by_id(AVL<int, Team *>()),
-                            AVL_team_by_ability(AVL<AbilityId, Team*>()),
+world_cup_t::world_cup_t(): AVL_team_by_id(AVL<int, shared_ptr<Team>>()),
+                            AVL_team_by_ability(AVL<AbilityId, shared_ptr<Team>>()),
                             playersTable(HashTable<Player*>())
 {
 }
 
 world_cup_t::~world_cup_t(){
-    AVL_team_by_id.clearDataAndTree();
+    AVL_team_by_id.clearTree();
     AVL_team_by_ability.clearTree();
 }
 
@@ -18,9 +18,9 @@ StatusType world_cup_t::add_team(int teamId){
     if (AVL_team_by_id.find(teamId)){
         return StatusType::FAILURE;
     }
-    Team* new_team;
+    shared_ptr<Team> new_team;
     try{
-        new_team = new Team (teamId);
+        new_team = shared_ptr<Team> (new Team (teamId));
     } catch (const std::bad_alloc& e){
         return StatusType::ALLOCATION_ERROR;
     }
@@ -37,7 +37,7 @@ StatusType world_cup_t::remove_team(int teamId){
     if (!AVL_team_by_id.find(teamId)){
         return StatusType::FAILURE;
     }
-    Node<int, Team *>* to_delete = AVL_team_by_id.find(teamId);
+    Node<int, shared_ptr<Team>>* to_delete = AVL_team_by_id.find(teamId);
     if (to_delete){
         to_delete->data->loose();
         AVL_team_by_ability.remove(to_delete->data->getAbilityId());
@@ -54,7 +54,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t
     if (playerId <= 0 || teamId <= 0 /*|| if spirit not good */ ||gamesPlayed < 0|| cards < 0 ) return StatusType::INVALID_INPUT;
     if (playersTable.find(playerId)!=-1 || AVL_team_by_id.find(teamId)== nullptr) return  StatusType::FAILURE;
 
-	Team* team = AVL_team_by_id.find(teamId)->data;
+    shared_ptr<Team> team = AVL_team_by_id.find(teamId)->data;
     AVL_team_by_ability.remove(team->getAbilityId());
 	Player* newPlayer= new Player(playerId, ability, cards, goalKeeper);
     team->updateStats(newPlayer, spirit, ability);
@@ -75,13 +75,13 @@ output_t<int> world_cup_t::play_match(int teamId1, int teamId2){
     if (teamId1 <= 0 || teamId2 <= 0 ||teamId1 == teamId2) return StatusType::INVALID_INPUT;
 	if(!AVL_team_by_id.find(teamId1)||!AVL_team_by_id.find(teamId2)) return  StatusType::FAILURE;
     int to_return =0;
-	Team* team1 = AVL_team_by_id.find(teamId1)->data;
-	Team* team2 = AVL_team_by_id.find(teamId2)->data;
+    std::shared_ptr<Team> team1 = AVL_team_by_id.find(teamId1)->data;
+    std::shared_ptr<Team> team2 = AVL_team_by_id.find(teamId2)->data;
 	if(!team1->canPlay()||!team2->canPlay()) return  StatusType::FAILURE;
 
 	team1->getLeader()->getNode()->addMatch();
 	team2->getLeader()->getNode()->addMatch();
-	Team* winner = nullptr;
+    std::shared_ptr<Team> winner = nullptr;
 	if(team1->getTotalAbility() + team1->getPoints() > team2->getTotalAbility() + team2->getPoints()){
 		winner = team1;
         to_return = 1;
@@ -132,16 +132,6 @@ output_t<int> world_cup_t::num_played_games_for_player(int playerId){
 
 
 
-//Team* getTeam(Player* player){
-//	NodeInUT* playerNode = player->getNode();
-//	if(playerNode->getFather() && playerNode->getFather()->getFather()) playerNode->treeContraction();
-//    if(playerNode->getFather()) {
-//        return playerNode->getFather()->getTeam();
-//    }
-//    return playerNode->getTeam();
-//}
-
-
 StatusType world_cup_t::add_player_cards(int playerId, int cards) {
 
     if (playerId <= 0|| cards<0){
@@ -153,7 +143,7 @@ StatusType world_cup_t::add_player_cards(int playerId, int cards) {
     }
     Player *player = playersTable.getT(indexOfPlayer);
     NodeInUT *playerNode = player->getNode();
-    Team *team;
+    std::shared_ptr<Team> team;
     if (!playerNode->getFather()) {
         team = playerNode->getTeam();
     }
@@ -218,8 +208,8 @@ StatusType world_cup_t::buy_team(int teamId1, int teamId2){
 
 	if (teamId1 <= 0 || teamId2 <= 0 ||teamId1 == teamId2) return StatusType::INVALID_INPUT;
 	if(!AVL_team_by_id.find(teamId1)||!AVL_team_by_id.find(teamId2)) return  StatusType::FAILURE;
-	Team* team1 = AVL_team_by_id.find(teamId1)->data;
-	Team* team2 = AVL_team_by_id.find(teamId2)->data;
+    shared_ptr<Team> team1 = AVL_team_by_id.find(teamId1)->data;
+    shared_ptr<Team> team2 = AVL_team_by_id.find(teamId2)->data;
 
     if(team1->getLeader() && team2->getLeader()) {
         NodeInUT* leader1 = team1->getLeader()->getNode();
@@ -256,6 +246,5 @@ StatusType world_cup_t::buy_team(int teamId1, int teamId2){
 	AVL_team_by_id.remove(teamId2);
     AVL_team_by_ability.remove(team2->getAbilityId());
 
-	delete team2;	
 	return StatusType::SUCCESS;
 }

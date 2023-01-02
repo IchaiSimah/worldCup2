@@ -1,7 +1,7 @@
 #include "UpTree.h"
 
 
-NodeInUT::NodeInUT(int id,  int gamesPlayed, const permutation_t& internSpirit, Player* player, NodeInUT* father, Team* team):
+NodeInUT::NodeInUT(int id,  int gamesPlayed, const permutation_t& internSpirit, Player* player, NodeInUT* father, std::shared_ptr<Team> team):
                                                                                 id(id),
                                                                                 gamesPlayed(gamesPlayed),
                                                                                 internSpirit(internSpirit),
@@ -65,7 +65,7 @@ void NodeInUT::setLeader(NodeInUT* newFather){
     father = newFather;
     }
 
-void NodeInUT::setTeam(Team* newTeam){
+void NodeInUT::setTeam(std::shared_ptr<Team> newTeam){
     team=newTeam;
 }
 void NodeInUT::setGamePlayed(int num){
@@ -73,7 +73,7 @@ void NodeInUT::setGamePlayed(int num){
     }
 
 
-Team* NodeInUT::getTeam(){
+std::shared_ptr<Team> NodeInUT::getTeam(){
         return team;
     }
 

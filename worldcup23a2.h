@@ -24,8 +24,8 @@
 
 class world_cup_t {
 private:
-	AVL<int , Team*> AVL_team_by_id;
-    AVL<AbilityId, Team*> AVL_team_by_ability;
+	AVL<int , shared_ptr<Team>> AVL_team_by_id;
+    AVL<AbilityId, shared_ptr<Team>> AVL_team_by_ability;
 	HashTable<Player*> playersTable;
 public:
 	// <DO-NOT-MODIFY> {
