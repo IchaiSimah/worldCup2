@@ -21,12 +21,21 @@
 #include "AVL_TREE_TEMPLATE.h"
 #include "UpTree.h"
 
+struct NodeInLinkedList{
+    Team* data;
+    NodeInLinkedList* next;
+};
+struct LinkedList{
+    NodeInLinkedList* first;
+    NodeInLinkedList* last;
+};
 
 class world_cup_t {
 private:
 	AVL<int , Team*> AVL_team_by_id;
     AVL<AbilityId, Team*> AVL_team_by_ability;
 	HashTable<Player*> playersTable;
+    LinkedList deletedTeams;
 public:
 	// <DO-NOT-MODIFY> {
 	
