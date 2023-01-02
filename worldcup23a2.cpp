@@ -248,6 +248,7 @@ StatusType world_cup_t::buy_team(int teamId1, int teamId2){
     AVL_team_by_ability.remove(team1->getAbilityId());
 	team1->addAbility(team2->getTotalAbility());
     team1->addSpirit(team2->getTotalSpirit());
+    team1->addPoints(team2->getPoints());
     AVL_team_by_ability.insert(team1->getAbilityId(), team1);
     //AVL_team_by_id.find(teamId2)->data->loose();
 	AVL_team_by_id.remove(teamId2);
