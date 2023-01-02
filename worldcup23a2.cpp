@@ -51,7 +51,7 @@ StatusType world_cup_t::remove_team(int teamId){
 StatusType world_cup_t::add_player(int playerId, int teamId, const permutation_t &spirit, int gamesPlayed,
                                    int ability, int cards, bool goalKeeper){
 
-    if (playerId <= 0 || teamId <= 0 /*|| if spirit not good */ ||gamesPlayed < 0|| cards < 0 ) return StatusType::INVALID_INPUT;
+    if (playerId <= 0 || teamId <= 0 || !spirit.isvalid() ||gamesPlayed < 0|| cards < 0 ) return StatusType::INVALID_INPUT;
     if (playersTable.find(playerId)!=-1 || AVL_team_by_id.find(teamId)== nullptr) return  StatusType::FAILURE;
 
     shared_ptr<Team> team = AVL_team_by_id.find(teamId)->data;
