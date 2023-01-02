@@ -273,6 +273,5 @@ StatusType world_cup_t::buy_team(int teamId1, int teamId2){
 	AVL_team_by_id.remove(teamId2);
     AVL_team_by_ability.remove(team2->getAbilityId());
 
-	delete team2;	
 	return StatusType::SUCCESS;
 }
