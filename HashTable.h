@@ -92,7 +92,7 @@ int doubleHashing(int id, int k){                                   // Hash Func
                 counter++;
             }
         }
-        delete m_table;                                             // delete the former table
+        delete[] m_table;                                             // delete the former table
         m_table = new T[m_size]();                                    // create a new one
         for(int i=0; i < m_numOfElements; i++){                     // fill it
             m_table[findIndexToInsert(tempArray[i]->getPlayerId())] = tempArray[i];
