@@ -3,11 +3,12 @@
 
 NodeInUT::NodeInUT(int id,  int gamesPlayed, const permutation_t& internSpirit, Player* player, NodeInUT* father, Team* team):
                                                                                 id(id),
+                                                                                gamesPlayed(gamesPlayed),
+                                                                                internSpirit(internSpirit),
                                                                                 player(player),
                                                                                 father(father),
-                                                                                team(team),
-                                                                                gamesPlayed(gamesPlayed),
-                                                                                internSpirit(internSpirit){}
+                                                                                team(team)
+                                                                                {}
 
 
 void NodeInUT::treeContraction(){
