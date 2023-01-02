@@ -5,7 +5,11 @@ Player::Player(int id, int ability, int cards, bool goalKeeper): id(id),
                                                                  cards(cards),
                                                                  goalKeeper(goalKeeper),
                                                                  nodeInUT(nullptr){}
-
+Player::~Player() {
+    if(nodeInUT){
+        delete nodeInUT;
+    }
+}
 void Player::addCards(int cardsToAdd){
         cards+=cardsToAdd;
     }

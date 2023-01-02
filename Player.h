@@ -15,6 +15,7 @@ private:
 
 public:
     Player(int id=0, int ability=0, int cards=0, bool goalKeeper=false);
+    ~Player();
     void addCards(int cardsToAdd);
     void setNode(NodeInUT* node);
 

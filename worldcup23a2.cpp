@@ -7,6 +7,8 @@ world_cup_t::world_cup_t(): AVL_team_by_id(AVL<int, Team *>()),
 }
 
 world_cup_t::~world_cup_t(){
+    AVL_team_by_id.clearTree();
+    AVL_team_by_ability.clearTree();
 }
 
 StatusType world_cup_t::add_team(int teamId){
