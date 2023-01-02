@@ -1,10 +1,10 @@
 #ifndef UP_TREE_H_
 #define UP_TREE_H_
 #include "wet2util.h"
-#include "Team.h"
+
 
 class Player;
-
+class Team;
 
 class NodeInUT{
 private:

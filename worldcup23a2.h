@@ -19,6 +19,7 @@
 #include "Team.h"
 #include "HashTable.h"
 #include "AVL_TREE_TEMPLATE.h"
+#include "UpTree.h"
 
 
 class world_cup_t {
