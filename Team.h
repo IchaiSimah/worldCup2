@@ -47,6 +47,7 @@ private:
 
 public:
     Team(int teamId);
+    ~Team();
     void addCards(int i);
     void addGoalKeeper(int num = 1);
     void addAbility(int ability);

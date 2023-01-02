@@ -12,7 +12,7 @@ private:
     int m_currentPower = 1;
     int m_numOfElements = 0;
     T* m_table;
-    T m_tomb;
+
 
 public:
     HashTable() {
@@ -21,7 +21,7 @@ public:
 
     ~HashTable(){
         for(int i=0 ; i<m_size ; i++){
-            if (m_table[i] != nullptr && m_table[i] != m_tomb)
+            if (m_table[i] != nullptr)
                 delete m_table[i];
         }
         delete []m_table;
@@ -98,7 +98,6 @@ int doubleHashing(int id, int k){                                   // Hash Func
             m_table[findIndexToInsert(tempArray[i]->getPlayerId())] = tempArray[i];
         }
     }
-
 };
 
 

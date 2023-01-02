@@ -3,7 +3,7 @@ Team::Team(int teamId):id(teamId),
                        leader(nullptr),
                        numOfGoalKeepers(0),
                        totalAbility(0),
-                       totalSpirit((new permutation_t)->neutral()),
+                       totalSpirit( permutation_t().neutral()),
                        totalCards(0),
                        inGame(true),
                        points(0),
@@ -88,4 +88,7 @@ AbilityId Team::getAbilityId() {
 
 void Team::loose() {
     inGame = false;
+}
+
+Team::~Team() {
 }
