@@ -10,11 +10,7 @@ NodeInUT::NodeInUT(int id,  int gamesPlayed, const permutation_t& internSpirit, 
                                                                                 team(team)
                                                                                 {}
 
-NodeInUT::~NodeInUT(){
-    if(!father){
-        delete team;
-    }
-}
+
 void NodeInUT::treeContraction(){
 	NodeInUT* leaderFinder = this;
     int newPlayedGames = gamesPlayed;

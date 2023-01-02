@@ -18,7 +18,6 @@ private:
 
 public: 
     NodeInUT(int id,  int gamesPlayed, const permutation_t& internSpirit, Player* player, NodeInUT* father, Team* team);
-    ~NodeInUT();
     permutation_t getInternSpirit()const;
 
     void addMatch(int i = 1);
