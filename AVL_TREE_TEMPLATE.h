@@ -148,6 +148,19 @@ public:
             delete node;
         }
     }
+    void clearData(){
+        clearData(root);
+        root = nullptr;
+        size=0;
+    }//remove all nodes deleting the data
+
+    void clearData (Node<T,S>* node){
+        if(node != nullptr){
+            clearData(node->left);
+            clearData(node->right);
+            delete node->data;
+        }
+    }
 
     S getData(Node<T,S>* node) const{
         return node->data;
