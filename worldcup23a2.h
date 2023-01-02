@@ -24,9 +24,9 @@
 
 class world_cup_t {
 private:
-	AVL<int , Team*> AVL_team_by_id = AVL<int, Team *>();
-    AVL<AbilityId, Team*> AVL_team_by_ability = AVL<AbilityId, Team*>();
-	HashTable<Player*> playersTable = HashTable<Player*>();
+	AVL<int , Team*> AVL_team_by_id;
+    AVL<AbilityId, Team*> AVL_team_by_ability;
+	HashTable<Player*> playersTable;
 public:
 	// <DO-NOT-MODIFY> {
 	

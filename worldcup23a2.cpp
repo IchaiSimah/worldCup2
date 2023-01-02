@@ -1,6 +1,9 @@
 #include "worldcup23a2.h"
 
-world_cup_t::world_cup_t(){
+world_cup_t::world_cup_t(): AVL_team_by_id(AVL<int, Team *>()),
+                            AVL_team_by_ability(AVL<AbilityId, Team*>()),
+                            playersTable(HashTable<Player*>())
+{
 }
 
 world_cup_t::~world_cup_t(){
