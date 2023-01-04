@@ -2,14 +2,23 @@
 #define HASH_TABLE_H_
 
 #include "math.h"
+#define POSSIBLESIZES 28
+#define FIRSTPRIME 13
 
 
 template<class T>
 class HashTable{
 
 private:
-    int m_size = 1;
-    int m_currentPower = 1;
+    int m_size = FIRSTPRIME;
+    int possibleSizes[POSSIBLESIZES]= {
+            13,29,53,97,193,389,769,1543,
+            3079,6151,12289,24593,49157,98317,
+            196613,393241,786433,1572869,3145739,6291469,
+            12582917,25165843,50331653,100663319,
+            201326611,402653189,805306457,1610612741
+    };
+    int indexOfPossibleSizes = 0;
     int m_numOfElements = 0;
     T* m_table;
 
@@ -84,7 +93,7 @@ int doubleHashing(int id, int k){                                   // Hash Func
     void sizeUp(){                                          // if num == 1 sizeUp, if num==-1 sizeDown
         int current_size= m_size;
         int counter = 0;
-        m_size= pow(2,(++m_currentPower))-1;
+        m_size= possibleSizes[++indexOfPossibleSizes];
         T* tempArray= new T[m_numOfElements];                               // create a tmp array to stock the real elements
         for(int i=0 ; i< current_size; i++){                        // fill it
             if(m_table[i] != nullptr){
@@ -100,8 +109,13 @@ int doubleHashing(int id, int k){                                   // Hash Func
         delete[] tempArray;
     }
 
-};
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+//possibles sizes
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+};
 
 
 #endif //HASH_TABLE_H
