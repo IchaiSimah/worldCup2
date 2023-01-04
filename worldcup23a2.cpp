@@ -173,6 +173,7 @@ output_t<int> world_cup_t::get_player_cards(int playerId){
 
 
 output_t<int> world_cup_t::get_team_points(int teamId){
+    if (teamId<= 0)return StatusType::INVALID_INPUT;
     if(!AVL_team_by_id.find(teamId)) return StatusType::FAILURE;
 	return AVL_team_by_id.find(teamId)->data->getPoints();
 }
