@@ -85,7 +85,7 @@ int doubleHashing(int id, int k){                                   // Hash Func
         int current_size= m_size;
         int counter = 0;
         m_size= pow(2,(++m_currentPower))-1;
-        T tempArray[m_numOfElements];                               // create a tmp array to stock the real elements
+        T tempArray= new T[m_numOfElements];                               // create a tmp array to stock the real elements
         for(int i=0 ; i< current_size; i++){                        // fill it
             if(m_table[i] != nullptr){
                 tempArray[counter] = m_table[i];
@@ -97,7 +97,9 @@ int doubleHashing(int id, int k){                                   // Hash Func
         for(int i=0; i < m_numOfElements; i++){                     // fill it
             m_table[findIndexToInsert(tempArray[i]->getPlayerId())] = tempArray[i];
         }
+        delete[] tempArray;
     }
+
 };
 
 
